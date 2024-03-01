@@ -1,0 +1,6 @@
+@SteamCopyCat_HostAddress = http://localhost:5102
+
+GET {{SteamCopyCat_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
