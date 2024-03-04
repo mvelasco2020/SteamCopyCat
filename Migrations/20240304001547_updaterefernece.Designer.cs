@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SteamCopyCat.Data;
 
@@ -11,9 +12,11 @@ using SteamCopyCat.Data;
 namespace SteamCopyCat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240304001547_updaterefernece")]
+    partial class updaterefernece
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,6 +350,9 @@ namespace SteamCopyCat.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IngredientsId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -359,17 +365,6 @@ namespace SteamCopyCat.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("MenuItems");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Calories = 469,
-                            CategoryId = 1,
-                            Description = "The McDonald's Bacon, Egg & Cheese Biscuit breakfast sandwich features a warm, buttermilk biscuit brushed with real butter, thick cut Applewood smoked bacon, a fluffy folded egg, and a slice of melty American cheese. There are 460 calories in a Bacon, Egg & Cheese Biscuit at McDonald's. Try one today with a Premium Roast Coffee and order with Mobile Order & Pay on the McDonald's App!\r\n\r\nDownload the McDonald’s app and earn points on every order with MyMcDonald's Rewards to redeem for a free Bacon, Egg & Cheese Biscuit.",
-                            Name = "Bacon, Egg & Cheese Biscuit",
-                            Price = 1.99
-                        });
                 });
 
             modelBuilder.Entity("IngredientMenuItem", b =>

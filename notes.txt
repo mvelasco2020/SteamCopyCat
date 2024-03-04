@@ -6,3 +6,5 @@ Microsoft.AspNetCore.Mvc.NewtonsoftJson
 
 add db create appdbcontext, inject to pipeline
 add identity block to pipepline
+Models and relationships
+ServiceResponse

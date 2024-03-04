@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SteamCopyCat.Data;
 
@@ -11,9 +12,11 @@ using SteamCopyCat.Data;
 namespace SteamCopyCat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240304000809_makecategoryingredientnullable")]
+    partial class makecategoryingredientnullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace SteamCopyCat.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("IngredientMenuItem", b =>
-                {
-                    b.Property<int>("IngredientsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MenuItemsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("IngredientsId", "MenuItemsId");
-
-                    b.HasIndex("MenuItemsId");
-
-                    b.ToTable("IngredientMenuItem");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -272,10 +260,15 @@ namespace SteamCopyCat.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MenuItemId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MenuItemId");
 
                     b.ToTable("Ingredient");
 
@@ -359,32 +352,6 @@ namespace SteamCopyCat.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("MenuItems");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Calories = 469,
-                            CategoryId = 1,
-                            Description = "The McDonald's Bacon, Egg & Cheese Biscuit breakfast sandwich features a warm, buttermilk biscuit brushed with real butter, thick cut Applewood smoked bacon, a fluffy folded egg, and a slice of melty American cheese. There are 460 calories in a Bacon, Egg & Cheese Biscuit at McDonald's. Try one today with a Premium Roast Coffee and order with Mobile Order & Pay on the McDonald's App!\r\n\r\nDownload the McDonald’s app and earn points on every order with MyMcDonald's Rewards to redeem for a free Bacon, Egg & Cheese Biscuit.",
-                            Name = "Bacon, Egg & Cheese Biscuit",
-                            Price = 1.99
-                        });
-                });
-
-            modelBuilder.Entity("IngredientMenuItem", b =>
-                {
-                    b.HasOne("SteamCopyCat.Models.Ingredient", null)
-                        .WithMany()
-                        .HasForeignKey("IngredientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SteamCopyCat.Models.MenuItem", null)
-                        .WithMany()
-                        .HasForeignKey("MenuItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -438,6 +405,13 @@ namespace SteamCopyCat.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SteamCopyCat.Models.Ingredient", b =>
+                {
+                    b.HasOne("SteamCopyCat.Models.MenuItem", null)
+                        .WithMany("Ingredients")
+                        .HasForeignKey("MenuItemId");
+                });
+
             modelBuilder.Entity("SteamCopyCat.Models.MenuItem", b =>
                 {
                     b.HasOne("SteamCopyCat.Models.Category", "Category")
@@ -452,6 +426,11 @@ namespace SteamCopyCat.Migrations
             modelBuilder.Entity("SteamCopyCat.Models.Category", b =>
                 {
                     b.Navigation("MenuItems");
+                });
+
+            modelBuilder.Entity("SteamCopyCat.Models.MenuItem", b =>
+                {
+                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }
