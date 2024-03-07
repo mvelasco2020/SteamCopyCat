@@ -12,11 +12,11 @@ namespace SteamCopyCat.Models
         public string Description { get; set; }
         public int Calories { get; set; }
 
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public Category? Category { get; set; }
 
         public List<Ingredient>? Ingredients { get; set; }
-        
+
         [Range(1, int.MaxValue)]
         public double Price { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SteamCopyCat.Migrations;
 using SteamCopyCat.Models;
 
 namespace SteamCopyCat.Data
@@ -13,12 +12,13 @@ namespace SteamCopyCat.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<MenuItem> MenuItems { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.Entity<Ingredient>().HasData(
-
                 new Ingredient
                 {
                     Id = 1,
@@ -73,8 +73,9 @@ namespace SteamCopyCat.Data
                     Description = "The McDonald's Bacon, Egg & Cheese Biscuit breakfast sandwich features a warm, buttermilk biscuit brushed with real butter, thick cut Applewood smoked bacon, a fluffy folded egg, and a slice of melty American cheese. There are 460 calories in a Bacon, Egg & Cheese Biscuit at McDonald's. Try one today with a Premium Roast Coffee and order with Mobile Order & Pay on the McDonald's App!\r\n\r\nDownload the McDonald’s app and earn points on every order with MyMcDonald's Rewards to redeem for a free Bacon, Egg & Cheese Biscuit.",
                     Calories = 469,
                     CategoryId = 1,
-                    Price = 1.99
+                    Price = 1.99,
                 });
+
         }
     }
 

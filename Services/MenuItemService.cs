@@ -17,7 +17,7 @@ namespace SteamCopyCat.Services
             var serviceResponse = new ServiceResponse<MenuItem>();
             try
             {
-                await _applicationDbContext.MenuItems.AddAsync(menuItem);
+                _applicationDbContext.MenuItems.Add(menuItem);
                 await _applicationDbContext.SaveChangesAsync();
                 serviceResponse.Data = menuItem;
 
@@ -63,6 +63,10 @@ namespace SteamCopyCat.Services
             var serviceResponse = new ServiceResponse<List<MenuItem>>();
             try
             {
+                var items = await _applicationDbContext
+                                    .MenuItems
+                                    .Include(m => m.Category)
+                                    .ToListAsync();
                 serviceResponse.Data = await _applicationDbContext.MenuItems.ToListAsync();
             }
             catch (Exception ex)

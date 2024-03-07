@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SteamCopyCat.Data;
 
@@ -11,9 +12,11 @@ using SteamCopyCat.Data;
 namespace SteamCopyCat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240307025049_updatemodels")]
+    partial class updatemodels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace SteamCopyCat.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("IngredientMenuItem", b =>
+                {
+                    b.Property<int>("IngredientsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MenuItemsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IngredientsId", "MenuItemsId");
+
+                    b.HasIndex("MenuItemsId");
+
+                    b.ToTable("IngredientMenuItem");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -257,15 +275,10 @@ namespace SteamCopyCat.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MenuItemId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MenuItemId");
 
                     b.ToTable("Ingredients");
 
@@ -328,7 +341,7 @@ namespace SteamCopyCat.Migrations
                     b.Property<int>("Calories")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -360,6 +373,21 @@ namespace SteamCopyCat.Migrations
                             Name = "Bacon, Egg & Cheese Biscuit",
                             Price = 1.99
                         });
+                });
+
+            modelBuilder.Entity("IngredientMenuItem", b =>
+                {
+                    b.HasOne("SteamCopyCat.Models.Ingredient", null)
+                        .WithMany()
+                        .HasForeignKey("IngredientsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SteamCopyCat.Models.MenuItem", null)
+                        .WithMany()
+                        .HasForeignKey("MenuItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -413,25 +441,20 @@ namespace SteamCopyCat.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SteamCopyCat.Models.Ingredient", b =>
-                {
-                    b.HasOne("SteamCopyCat.Models.MenuItem", null)
-                        .WithMany("Ingredients")
-                        .HasForeignKey("MenuItemId");
-                });
-
             modelBuilder.Entity("SteamCopyCat.Models.MenuItem", b =>
                 {
                     b.HasOne("SteamCopyCat.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .WithMany("MenuItems")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("SteamCopyCat.Models.MenuItem", b =>
+            modelBuilder.Entity("SteamCopyCat.Models.Category", b =>
                 {
-                    b.Navigation("Ingredients");
+                    b.Navigation("MenuItems");
                 });
 #pragma warning restore 612, 618
         }
