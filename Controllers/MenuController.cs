@@ -38,15 +38,17 @@ namespace SteamCopyCat.Controllers
         }
 
         // PUT api/<MenuController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<MenuItem>>> Edit(MenuItem menuItem)
         {
+            return Ok(await _menuItemService.UpdateMenuItem(menuItem));
         }
 
         // DELETE api/<MenuController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("Delete")]
+        public async Task<ActionResult<ServiceResponse<List<MenuItem>>>> Delete(int id)
         {
+            return Ok(await _menuItemService.DeleteMenuItem(id));
         }
     }
 }
