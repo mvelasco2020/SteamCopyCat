@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SteamCopyCat.DTO;
 using SteamCopyCat.Models;
 using SteamCopyCat.Services;
 
@@ -25,7 +26,7 @@ namespace SteamCopyCat.Controllers
 
         // GET api/<MenuController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<MenuItem>>> GetMenuItem(int id)
+        public async Task<ActionResult<ServiceResponse<DTO_Get_MenuItem>>> GetMenuItem(int id)
         {
             return Ok(await _menuItemService.GetMenuItem(id));
         }
@@ -39,7 +40,7 @@ namespace SteamCopyCat.Controllers
 
         // PUT api/<MenuController>/5
         [HttpPut]
-        public async Task<ActionResult<ServiceResponse<MenuItem>>> Edit(MenuItem menuItem)
+        public async Task<ActionResult<ServiceResponse<MenuItem>>> Edit(DTO_Update_MenuItem menuItem)
         {
             return Ok(await _menuItemService.UpdateMenuItem(menuItem));
         }

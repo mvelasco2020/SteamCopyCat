@@ -22,6 +22,21 @@ namespace SteamCopyCat.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("IngredientMenuItem", b =>
+                {
+                    b.Property<int>("IngredientsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MenuItemsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IngredientsId", "MenuItemsId");
+
+                    b.HasIndex("MenuItemsId");
+
+                    b.ToTable("IngredientMenuItem");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -257,15 +272,10 @@ namespace SteamCopyCat.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MenuItemId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MenuItemId");
 
                     b.ToTable("Ingredients");
 
@@ -362,6 +372,21 @@ namespace SteamCopyCat.Migrations
                         });
                 });
 
+            modelBuilder.Entity("IngredientMenuItem", b =>
+                {
+                    b.HasOne("SteamCopyCat.Models.Ingredient", null)
+                        .WithMany()
+                        .HasForeignKey("IngredientsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SteamCopyCat.Models.MenuItem", null)
+                        .WithMany()
+                        .HasForeignKey("MenuItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -413,13 +438,6 @@ namespace SteamCopyCat.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SteamCopyCat.Models.Ingredient", b =>
-                {
-                    b.HasOne("SteamCopyCat.Models.MenuItem", null)
-                        .WithMany("Ingredients")
-                        .HasForeignKey("MenuItemId");
-                });
-
             modelBuilder.Entity("SteamCopyCat.Models.MenuItem", b =>
                 {
                     b.HasOne("SteamCopyCat.Models.Category", "Category")
@@ -427,11 +445,6 @@ namespace SteamCopyCat.Migrations
                         .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("SteamCopyCat.Models.MenuItem", b =>
-                {
-                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }

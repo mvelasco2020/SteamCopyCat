@@ -12,8 +12,8 @@ using SteamCopyCat.Data;
 namespace SteamCopyCat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240304003223_seeditem1")]
-    partial class seeditem1
+    [Migration("20240309203800_newmigration")]
+    partial class newmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -254,7 +254,7 @@ namespace SteamCopyCat.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -280,7 +280,7 @@ namespace SteamCopyCat.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredient");
+                    b.ToTable("Ingredients");
 
                     b.HasData(
                         new
@@ -341,7 +341,7 @@ namespace SteamCopyCat.Migrations
                     b.Property<int>("Calories")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -444,17 +444,10 @@ namespace SteamCopyCat.Migrations
             modelBuilder.Entity("SteamCopyCat.Models.MenuItem", b =>
                 {
                     b.HasOne("SteamCopyCat.Models.Category", "Category")
-                        .WithMany("MenuItems")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("SteamCopyCat.Models.Category", b =>
-                {
-                    b.Navigation("MenuItems");
                 });
 #pragma warning restore 612, 618
         }

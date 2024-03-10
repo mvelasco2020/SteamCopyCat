@@ -1,16 +1,17 @@
-﻿using SteamCopyCat.Models;
+﻿using SteamCopyCat.DTO;
+using SteamCopyCat.Models;
 
 namespace SteamCopyCat.Services
 {
     public interface IMenuItemService
     {
 
-        Task<ServiceResponse<MenuItem>> GetMenuItem(int Id);
-        Task<ServiceResponse<List<MenuItem>>> GetAllMenuItems();
-        Task<ServiceResponse<MenuItem>> AddMenuItem(MenuItem menuItem);
+        Task<ServiceResponse<DTO_Get_MenuItem>> GetMenuItem(int Id);
+        Task<ServiceResponse<List<DTO_Get_MenuItem>>> GetAllMenuItems();
+        Task<ServiceResponse<DTO_Get_MenuItem>> AddMenuItem(DTO_Get_MenuItem menuItem);
 
-        Task<ServiceResponse<MenuItem>> UpdateMenuItem(MenuItem menuItem);
+        Task<ServiceResponse<DTO_Get_MenuItem>> UpdateMenuItem(DTO_Update_MenuItem menuItem);
 
-        Task<ServiceResponse<List<MenuItem>>> DeleteMenuItem(int Id);
+        Task<ServiceResponse<List<DTO_Get_MenuItem>>> DeleteMenuItem(int Id);
     }
 }

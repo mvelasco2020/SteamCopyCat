@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SteamCopyCat.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmigration : Migration
+    public partial class newmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +32,7 @@ namespace SteamCopyCat.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -48,6 +51,33 @@ namespace SteamCopyCat.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ingredients",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredients", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +186,79 @@ namespace SteamCopyCat.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MenuItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Calories = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MenuItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MenuItems_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IngredientMenuItem",
+                columns: table => new
+                {
+                    IngredientsId = table.Column<int>(type: "int", nullable: false),
+                    MenuItemsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IngredientMenuItem", x => new { x.IngredientsId, x.MenuItemsId });
+                    table.ForeignKey(
+                        name: "FK_IngredientMenuItem_Ingredients_IngredientsId",
+                        column: x => x.IngredientsId,
+                        principalTable: "Ingredients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IngredientMenuItem_MenuItems_MenuItemsId",
+                        column: x => x.MenuItemsId,
+                        principalTable: "MenuItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Breakfast" });
+
+            migrationBuilder.InsertData(
+                table: "Ingredients",
+                columns: new[] { "Id", "Image", "Name" },
+                values: new object[,]
+                {
+                    { 1, null, "Biscuit" },
+                    { 2, null, "Folded Egg" },
+                    { 3, null, "Pasteurized Process American Cheese" },
+                    { 4, null, "Thick Cut Applewood Smoked Bacon" },
+                    { 5, null, "Salted Butter" },
+                    { 6, null, "Clarified Butter" },
+                    { 7, null, "English Muffin" },
+                    { 8, null, "Egg" },
+                    { 9, null, "Canadian Bacon" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MenuItems",
+                columns: new[] { "Id", "Calories", "CategoryId", "Description", "Image", "Name", "Price" },
+                values: new object[] { 1, 469, 1, "The McDonald's Bacon, Egg & Cheese Biscuit breakfast sandwich features a warm, buttermilk biscuit brushed with real butter, thick cut Applewood smoked bacon, a fluffy folded egg, and a slice of melty American cheese. There are 460 calories in a Bacon, Egg & Cheese Biscuit at McDonald's. Try one today with a Premium Roast Coffee and order with Mobile Order & Pay on the McDonald's App!\r\n\r\nDownload the McDonald’s app and earn points on every order with MyMcDonald's Rewards to redeem for a free Bacon, Egg & Cheese Biscuit.", null, "Bacon, Egg & Cheese Biscuit", 1.99 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -194,6 +297,16 @@ namespace SteamCopyCat.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IngredientMenuItem_MenuItemsId",
+                table: "IngredientMenuItem",
+                column: "MenuItemsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MenuItems_CategoryId",
+                table: "MenuItems",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -215,10 +328,22 @@ namespace SteamCopyCat.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "IngredientMenuItem");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Ingredients");
+
+            migrationBuilder.DropTable(
+                name: "MenuItems");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

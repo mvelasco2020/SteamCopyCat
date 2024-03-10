@@ -17,10 +17,7 @@ namespace SteamCopyCat.Models
 
         public List<Ingredient>? Ingredients { get; set; }
 
-        [Range(1, int.MaxValue)]
         public double Price { get; set; }
-
-
         public string Image { get; set; }
     }
 }
