@@ -132,21 +132,9 @@ namespace SteamCopyCat.Services
                                         .FirstAsync(m => m.Id == Id);
                 if (menuItem is not null)
                 {
-                    DTO_Get_MenuItem returnItem = new DTO_Get_MenuItem();
-                    returnItem.Name = menuItem.Name;
-                    returnItem.Price = menuItem.Price;
-                    returnItem.Calories = menuItem.Calories;
-                    returnItem.CategoryId = menuItem.CategoryId;
-                    returnItem.Category = new DTO_Get_Category { Name = menuItem.Category.Name };
-                    returnItem.Description = menuItem.Description;
-                    returnItem.Image = menuItem.Image;
-                    returnItem.Ingredients = menuItem
-                                        .Ingredients
-                                        .Select(i => new DTO_Get_Ingredient {
-                                            Name = i.Name
-                                        })
-                                        .ToList();
-                    serviceResponse.Data = returnItem;
+                  
+                    
+                    serviceResponse.Data = MapMenuItemToDTO(menuItem);
                 }
             }
             catch (Exception ex)
@@ -209,6 +197,7 @@ namespace SteamCopyCat.Services
 
             DTO_Get_MenuItem menuItemDTO = new DTO_Get_MenuItem
             {
+                Id  = menuItem.Id,
                 Price = menuItem.Price,
                 Description = menuItem.Description,
                 Name = menuItem.Name,
@@ -231,6 +220,7 @@ namespace SteamCopyCat.Services
                 i => menuItems.Add(
                     new DTO_Get_MenuItem()
                     {
+                        Id = i.Id,
                         Image = i.Image,
                         Calories = i.Calories,
                         Category = new DTO_Get_Category { Name = i.Category.Name },
