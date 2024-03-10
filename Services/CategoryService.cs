@@ -67,7 +67,7 @@ namespace FastfoodCopyCat.Services
             try
             {
                 var categories = await _context.Categories.ToListAsync();
-                serviceResponse.Data = MapCategoriesToListDTO(categories);
+                serviceResponse.Data = categories.Select(MapCategoryToDTO).ToList();
             }
             catch (Exception ex)
             {
@@ -120,6 +120,7 @@ namespace FastfoodCopyCat.Services
             return serviceResponse;
         }
 
+        // Not used
         private List<DTO_Get_Category> MapCategoriesToListDTO(List<Category> categories)
         {
             var dtoCategories = categories.Select(

@@ -79,7 +79,7 @@ namespace SteamCopyCat.Services
                                     .Include(m => m.Category)
                                     .Include(m => m.Ingredients)
                                     .ToList();
-                    serviceResponse.Data =  MapListOfMenuItemToDTO(menuItems);
+                    serviceResponse.Data =  menuItems.Select(MapMenuItemToDTO).ToList();
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace SteamCopyCat.Services
                                     .Include(m => m.Ingredients)
                                     .ToListAsync();
 
-                serviceResponse.Data = MapListOfMenuItemToDTO(items);
+                serviceResponse.Data = items.Select(MapMenuItemToDTO).ToList();
             }
             catch (Exception ex)
             {
@@ -190,6 +190,7 @@ namespace SteamCopyCat.Services
                                 new DTO_Get_Ingredient {
                                     Name =  i.Name,
                                     Id = i.Id,
+                                    Image = i.Image,
                                 })
                             .ToList();
 
@@ -210,6 +211,8 @@ namespace SteamCopyCat.Services
             };
             return menuItemDTO;
 }
+
+        //Not Used
         private List<DTO_Get_MenuItem> MapListOfMenuItemToDTO(List<MenuItem> items)
         {
             List<DTO_Get_MenuItem> menuItems = new List<DTO_Get_MenuItem>();
