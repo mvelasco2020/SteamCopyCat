@@ -132,8 +132,6 @@ namespace SteamCopyCat.Services
                                         .FirstAsync(m => m.Id == Id);
                 if (menuItem is not null)
                 {
-                  
-                    
                     serviceResponse.Data = MapMenuItemToDTO(menuItem);
                 }
             }

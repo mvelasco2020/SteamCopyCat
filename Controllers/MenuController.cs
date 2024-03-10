@@ -40,14 +40,14 @@ namespace SteamCopyCat.Controllers
 
         // PUT api/<MenuController>/5
         [HttpPut]
-        public async Task<ActionResult<ServiceResponse<MenuItem>>> Edit(DTO_Update_MenuItem menuItem)
+        public async Task<ActionResult<ServiceResponse<DTO_Get_MenuItem>>> Edit(DTO_Update_MenuItem menuItem)
         {
             return Ok(await _menuItemService.UpdateMenuItem(menuItem));
         }
 
         // DELETE api/<MenuController>/5
         [HttpDelete("Delete")]
-        public async Task<ActionResult<ServiceResponse<List<MenuItem>>>> Delete(int id)
+        public async Task<ActionResult<ServiceResponse<List<DTO_Get_MenuItem>>>> Delete(int id)
         {
             return Ok(await _menuItemService.DeleteMenuItem(id));
         }
