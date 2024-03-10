@@ -202,7 +202,8 @@ namespace SteamCopyCat.Services
             List<DTO_Get_Ingredient> ingredients = menuItem
                             .Ingredients.Select( i => 
                                 new DTO_Get_Ingredient {
-                                    Name =  i.Name 
+                                    Name =  i.Name,
+                                    Id = i.Id,
                                 })
                             .ToList();
 
@@ -238,7 +239,10 @@ namespace SteamCopyCat.Services
                         Name = i.Name,
                         Price = i.Price,
                         Ingredients = i.Ingredients.Select(j =>
-                                        new DTO_Get_Ingredient { Name = j.Name })
+                                        new DTO_Get_Ingredient { 
+                                            Name = j.Name,
+                                            Id = j.Id,
+                                        })
                                         .ToList(),
                     }
                     )

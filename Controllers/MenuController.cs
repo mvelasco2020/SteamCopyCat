@@ -19,7 +19,7 @@ namespace SteamCopyCat.Controllers
         }
         // GET: api/<MenuController>
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<MenuItem>>> GetAll()
+        public async Task<ActionResult<ServiceResponse<DTO_Get_MenuItem>>> GetAll()
         {
             return Ok(await _menuItemService.GetAllMenuItems());
         }
@@ -33,7 +33,7 @@ namespace SteamCopyCat.Controllers
 
         // POST api/<MenuController>
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<MenuItem>>> Post(MenuItem menuItem)
+        public async Task<ActionResult<ServiceResponse<DTO_Get_MenuItem>>> AddMenuItem(DTO_Get_MenuItem menuItem)
         {
             return Ok(await _menuItemService.AddMenuItem(menuItem));
         }
