@@ -1,3 +1,4 @@
+using FastfoodCopyCat.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SteamCopyCat.Data;
@@ -18,8 +19,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 
 //dependencies
 builder.Services.AddScoped<IMenuItemService, MenuItemService>();
-
-
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

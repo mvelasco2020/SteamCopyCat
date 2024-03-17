@@ -56,7 +56,7 @@ namespace FastfoodCopyCat.Services
 
                 if (ingredient is null)
                 {
-                    throw new Exception($"Ingredient with the name of {ingredient.Name} was not found.");
+                    throw new Exception($"Ingredient with the name of {name} was not found.");
                 }
 
                  _context.Ingredients.Remove(ingredient);
@@ -76,10 +76,11 @@ namespace FastfoodCopyCat.Services
             var serviceResponse = new ServiceResponse<List<DTO_Get_Ingredient>>();
             try
             {
-                var ingredients = await _context.Ingredients.ToListAsync();
-
-                var newList = ingredients.Select(MapIngredientToDTO).ToList();
-               serviceResponse.Data= newList;
+                var ingredients = await _context
+                                    .Ingredients
+                                    .Include(i => i.MenuItems)
+                                    .ToListAsync();
+               serviceResponse.Data= ingredients.Select(i => MapIngredientToDTO(i)).ToList();
             }
             catch (Exception ex)
             {
@@ -122,8 +123,7 @@ namespace FastfoodCopyCat.Services
             {
                 var currentIngredient = await _context
                                             .Ingredients
-                                            .FirstOrDefaultAsync(i => 
-                                                i.Name.ToLower() == ingredient.Name.ToLower());
+                                            .FirstOrDefaultAsync(i => i.Id == ingredient.Id);
 
                 if (ingredient is null)
                 {
@@ -149,9 +149,10 @@ namespace FastfoodCopyCat.Services
         {
             return new DTO_Get_Ingredient
             {
+                Id = ingredient.Id,
                 Name = ingredient.Name,
                 Image = ingredient.Image,
-                MenuItems = ingredient.MenuItems.Select(m => new DTO_Get_MenuItem
+                MenuItems = ingredient.MenuItems?.Select(m => new DTO_Get_MenuItem
                 {
                     Id = m.Id,
                     Name = m.Name,

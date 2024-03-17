@@ -97,20 +97,20 @@ namespace FastfoodCopyCat.Services
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<DTO_Get_Category>> UpdateCategory(string name)
+        public async Task<ServiceResponse<DTO_Get_Category>> UpdateCategory(DTO_Get_Category category)
         {
             var serviceResponse = new ServiceResponse<DTO_Get_Category>();
             try
             {
-                var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == name.ToLower());
+                var oldCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == category.Id );
                 if (category is null)
                 {
-                    throw new Exception($"Category {name} do not exists");
+                    throw new Exception($"Category {category.Name} do not exists");
                 }
 
-                category.Name = name;
+                oldCategory.Name = category.Name;
                 await _context.SaveChangesAsync();
-                serviceResponse.Data = MapCategoryToDTO(category);
+                serviceResponse.Data = MapCategoryToDTO(oldCategory);
             }
             catch (Exception ex)
             {
@@ -136,6 +136,7 @@ namespace FastfoodCopyCat.Services
         {
             return new DTO_Get_Category
             {
+                Id = category.Id,
                 Name = category.Name,
             };
         }
